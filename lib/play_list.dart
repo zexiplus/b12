@@ -31,15 +31,6 @@ class _PlayListPageState extends State<PlayListPage> {
     super.initState();
   }
 
-  void playAudio(AudioFile file, cb) async {
-    audioPlayer.setAsset(file.path);
-    await audioPlayer.play().whenComplete(() => cb());
-  }
-
-  void pauseAudio() async {
-    await audioPlayer.pause();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +48,16 @@ class _PlayListPageState extends State<PlayListPage> {
                         setState(() {
                           audioStatus[index] = false;
                         });
-                        pauseAudio();
+                        audioPlayer.pause();
                       } else {
                         setState(() {
                           audioStatus.fillRange(0, audioStatus.length, false);
                           audioStatus[index] = true;
                         });
-                        playAudio(audioFiles[index],
-                            () => setState(() => audioStatus[index] = false));
+                        audioPlayer.setAsset(audioFiles[index].path);
+                        audioPlayer
+                            .play()
+                            .whenComplete(() => print('not as expect'));
                       }
                     },
                     trailing: audioStatus[index]
