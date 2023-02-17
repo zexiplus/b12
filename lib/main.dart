@@ -28,36 +28,27 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
+        child: SizedBox(
+          width: 480,
+          height: 320,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   AnimateWidget(
                     child: SizedBox(
-                      width: 300,
-                      height: 300,
+                      width: constraints.maxWidth * 0.6,
                       child: Image.asset(
                         'assets/image/gray_gear.png',
                         colorBlendMode: BlendMode.dstATop,
                       ),
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                width: 100,
-                height: 300,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                  ),
                   AnimateWidget(
                     child: SizedBox(
-                      width: 100,
-                      height: 100,
+                      width: constraints.maxWidth * 0.3,
                       child: GestureDetector(
                         child: Image.asset(
                           'assets/image/gray_gear.png',
@@ -70,8 +61,8 @@ class HomePage extends StatelessWidget {
                     ),
                   )
                 ],
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),

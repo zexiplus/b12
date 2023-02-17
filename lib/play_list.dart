@@ -2,32 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class PlayListPage extends StatefulWidget {
+  const PlayListPage({super.key});
+
   @override
   _PlayListPageState createState() => _PlayListPageState();
 }
 
+class AudioFile {
+  String path;
+  String name;
+  AudioFile(this.name, this.path);
+}
+
+List<AudioFile> audioFiles = [
+  AudioFile('B12_speaker', 'assets/audio/B12_speaker.mp3'),
+  AudioFile('Drone_memory', 'assets/audio/Drone_memory.mp3'),
+  AudioFile('meca-in', 'assets/audio/meca-in.mp3'),
+  AudioFile('meca-out', 'assets/audio/meca-out.mp3'),
+];
+
 class _PlayListPageState extends State<PlayListPage> {
   AudioPlayer audioPlayer = AudioPlayer();
-  List<String> audioFiles = [
-    'assets/audio/B12_speaker.mp3',
-    'assets/audio/Drone_memory.mp3',
-    'assets/audio/meca-in.mp3',
-    'assets/audio/meca-out.mp3'
-  ];
+
+  List<bool> audioStatus = audioFiles.map((f) => false).toList();
 
   @override
   void initState() {
     super.initState();
-    getAudioFiles();
   }
 
-  void getAudioFiles() async {
-    setState(() {});
+  void playAudio(AudioFile file, cb) async {
+    audioPlayer.setAsset(file.path);
+    await audioPlayer.play().whenComplete(() => cb());
   }
 
-  void playAudio(String filePath) async {
-    audioPlayer.setAsset(filePath);
-    await audioPlayer.play();
+  void pauseAudio() async {
+    await audioPlayer.pause();
   }
 
   @override
@@ -36,16 +46,30 @@ class _PlayListPageState extends State<PlayListPage> {
       appBar: AppBar(
         title: const Text('Play List'),
       ),
-      body: audioFiles.length > 0
+      body: audioFiles.isNotEmpty
           ? ListView.builder(
               itemCount: audioFiles.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(audioFiles[index].split('/').last),
-                  onTap: () {
-                    playAudio(audioFiles[index]);
-                  },
-                );
+                    title: Text(audioFiles[index].name),
+                    onTap: () {
+                      if (audioStatus[index]) {
+                        setState(() {
+                          audioStatus[index] = false;
+                        });
+                        pauseAudio();
+                      } else {
+                        setState(() {
+                          audioStatus.fillRange(0, audioStatus.length, false);
+                          audioStatus[index] = true;
+                        });
+                        playAudio(audioFiles[index],
+                            () => setState(() => audioStatus[index] = false));
+                      }
+                    },
+                    trailing: audioStatus[index]
+                        ? const Icon(Icons.stop)
+                        : const Icon(Icons.play_circle));
               },
             )
           : const Center(
