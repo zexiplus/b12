@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class PlayListPage extends StatefulWidget {
   const PlayListPage({super.key});
@@ -15,10 +15,10 @@ class AudioFile {
 }
 
 List<AudioFile> audioFiles = [
-  AudioFile('B12_speaker', 'assets/audio/B12_speaker.mp3'),
-  AudioFile('Drone_memory', 'assets/audio/Drone_memory.mp3'),
-  AudioFile('meca-in', 'assets/audio/meca-in.mp3'),
-  AudioFile('meca-out', 'assets/audio/meca-out.mp3'),
+  AudioFile('B12_speaker', 'audio/B12_speaker.mp3'),
+  AudioFile('Drone_memory', 'audio/Drone_memory.mp3'),
+  AudioFile('meca-in', 'audio/meca-in.mp3'),
+  AudioFile('meca-out', 'audio/meca-out.mp3'),
 ];
 
 class _PlayListPageState extends State<PlayListPage> {
@@ -35,7 +35,7 @@ class _PlayListPageState extends State<PlayListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Play List'),
+        title: const Text('Play List 2'),
       ),
       body: audioFiles.isNotEmpty
           ? ListView.builder(
@@ -43,21 +43,19 @@ class _PlayListPageState extends State<PlayListPage> {
               itemBuilder: (context, index) {
                 return ListTile(
                     title: Text(audioFiles[index].name),
-                    onTap: () {
+                    onTap: () async {
                       if (audioStatus[index]) {
                         setState(() {
                           audioStatus[index] = false;
                         });
-                        audioPlayer.pause();
+                        await audioPlayer.pause();
                       } else {
                         setState(() {
                           audioStatus.fillRange(0, audioStatus.length, false);
                           audioStatus[index] = true;
                         });
-                        audioPlayer.setAsset(audioFiles[index].path);
-                        audioPlayer
-                            .play()
-                            .whenComplete(() => print('not as expect'));
+                        await audioPlayer
+                            .play(AssetSource(audioFiles[index].path));
                       }
                     },
                     trailing: audioStatus[index]
