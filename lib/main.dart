@@ -28,43 +28,39 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SizedBox(
-          width: 480,
-          height: 320,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AnimateWidget(
-                    child: SizedBox(
-                      width: constraints.maxWidth * 0.6,
+        child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AnimateWidget(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.width * 0.6,
+                    child: Image.asset(
+                      'assets/image/gray_gear.png',
+                      colorBlendMode: BlendMode.dstATop,
+                    ),
+                  ),
+                ),
+                AnimateWidget(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    height: MediaQuery.of(context).size.width * 0.3,
+                    child: GestureDetector(
                       child: Image.asset(
                         'assets/image/gray_gear.png',
                         colorBlendMode: BlendMode.dstATop,
                       ),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/playlist');
+                      },
                     ),
                   ),
-                  AnimateWidget(
-                    child: SizedBox(
-                      width: constraints.maxWidth * 0.3,
-                      child: GestureDetector(
-                        child: Image.asset(
-                          'assets/image/gray_gear.png',
-                          colorBlendMode: BlendMode.dstATop,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/playlist');
-                        },
-                      ),
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
-        ),
+                )
+              ],
+            )),
       ),
     );
   }
