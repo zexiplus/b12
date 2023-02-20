@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   just_audio: ^0.9.31
   just_audio_mpv: ^0.1.6
+  audioplayers: ^3.0.1
 
 dev_dependencies:
   flutter_test:
