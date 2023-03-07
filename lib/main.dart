@@ -23,45 +23,58 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class B12Shape extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = const Color.fromARGB(255, 244, 210, 49)
+      ..style = PaintingStyle.fill;
+
+    Path path = Path();
+    path.moveTo(0, size.height);
+    path.lineTo(0, 0);
+    path.lineTo(size.width - 100, 0);
+    path.lineTo(size.width - 100, 60);
+    path.lineTo(size.width, 60);
+    path.lineTo(size.width - 100, 180);
+    path.lineTo(size.width - 100, size.height);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-            padding: const EdgeInsets.all(30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimateWidget(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: MediaQuery.of(context).size.width * 0.6,
-                    child: Image.asset(
-                      'assets/image/gray_gear.png',
-                      colorBlendMode: BlendMode.dstATop,
-                    ),
-                  ),
+          child: Stack(
+        children: [
+          CustomPaint(
+            painter: B12Shape(),
+            size: MediaQuery.of(context).size,
+          ),
+          AnimateWidget(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.width * 0.6,
+              child: GestureDetector(
+                child: Image.asset(
+                  'assets/image/loading.jpeg',
+                  colorBlendMode: BlendMode.dstATop,
                 ),
-                AnimateWidget(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    height: MediaQuery.of(context).size.width * 0.3,
-                    child: GestureDetector(
-                      child: Image.asset(
-                        'assets/image/gray_gear.png',
-                        colorBlendMode: BlendMode.dstATop,
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, '/playlist');
-                      },
-                    ),
-                  ),
-                )
-              ],
-            )),
-      ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/playlist');
+                },
+              ),
+            ),
+          )
+        ],
+      )),
     );
   }
 }
@@ -83,7 +96,7 @@ class _AnimateWidgetState extends State<AnimateWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 10),
+      duration: const Duration(milliseconds: 1200),
     )..repeat();
   }
 
